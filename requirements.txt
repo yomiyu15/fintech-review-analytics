@@ -1,0 +1,18 @@
+# Full pipeline (Tasks 2–4). For Task 1 only, use requirements-task1.txt
+-r requirements-task1.txt
+pandas>=2.0.0
+numpy>=1.24.0
+transformers>=4.36.0
+torch>=2.0.0
+vaderSentiment>=3.3.2
+textblob>=0.17.1
+spacy>=3.7.0
+scikit-learn>=1.3.0
+nltk>=3.8.0
+matplotlib>=3.8.0
+seaborn>=0.13.0
+wordcloud>=1.9.0
+psycopg2-binary>=2.9.9
+SQLAlchemy>=2.0.0
+python-dotenv>=1.0.0
+pytest-cov>=4.1.0
