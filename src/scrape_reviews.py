@@ -1,17 +1,18 @@
 """
 Scrape Google Play Store reviews for Ethiopian bank mobile apps.
 
-Uses google-play-scraper with pagination to reach MIN_REVIEWS_PER_BANK per app.
+Uses google-play-scraper with pagination (NEWEST, then MOST_RELEVANT).
 """
 
 from __future__ import annotations
 
 import json
 import logging
+import time
 from datetime import datetime
-from pathlib import Path
 from typing import Any
 
+import pandas as pd
 from google_play_scraper import Sort, reviews
 from google_play_scraper.exceptions import NotFoundError
 
@@ -23,156 +24,117 @@ from src.config import (
     SCRAPE_BATCH_SIZE,
     SCRAPE_COUNTRY,
     SCRAPE_LANG,
+    SCRAPE_METADATA_JSON,
     SOURCE_LABEL,
 )
-from src.io_utils import write_csv_rows
 
 logger = logging.getLogger(__name__)
 
-SCRAPE_METADATA_PATH = DATA_RAW_DIR / "scrape_metadata.json"
 
-
-def _parse_review_date(raw: Any) -> str | None:
-    """Normalize Play Store datetime to YYYY-MM-DD."""
+def _parse_date(raw: Any) -> str | None:
     if raw is None:
         return None
     if isinstance(raw, datetime):
         return raw.strftime("%Y-%m-%d")
-    if isinstance(raw, str):
-        try:
-            return datetime.fromisoformat(raw.replace("Z", "+00:00")).strftime("%Y-%m-%d")
-        except ValueError:
-            pass
-    return None
+    try:
+        return pd.to_datetime(raw).strftime("%Y-%m-%d")
+    except (TypeError, ValueError):
+        return None
 
 
 def scrape_app_reviews(
     package_id: str,
     bank_key: str,
-    app_name: str,
     bank_name: str,
-    target_count: int = MIN_REVIEWS_PER_BANK,
+    app_name: str,
+    target: int = MIN_REVIEWS_PER_BANK,
 ) -> list[dict[str, Any]]:
-    """
-    Fetch reviews for one app, paginating until target_count or no more results.
-
-    Sorts by NEWEST first, then falls back to MOST_RELEVANT if needed.
-    """
+    """Paginate until target reviews or no more pages."""
     collected: list[dict[str, Any]] = []
-    continuation_token = None
-    sort_orders = [Sort.NEWEST, Sort.MOST_RELEVANT]
+    sorts = [Sort.NEWEST, Sort.MOST_RELEVANT]
 
-    for sort in sort_orders:
-        if len(collected) >= target_count:
+    for sort in sorts:
+        if len(collected) >= target:
             break
-        continuation_token = None
-        while len(collected) < target_count:
-            batch_size = min(SCRAPE_BATCH_SIZE, target_count - len(collected) + 50)
+        token = None
+        while len(collected) < target:
             try:
-                batch, continuation_token = reviews(
+                batch, token = reviews(
                     package_id,
                     lang=SCRAPE_LANG,
                     country=SCRAPE_COUNTRY,
                     sort=sort,
-                    count=batch_size,
-                    continuation_token=continuation_token,
+                    count=min(SCRAPE_BATCH_SIZE, target - len(collected) + 20),
+                    continuation_token=token,
                 )
             except NotFoundError:
-                logger.error("App not found: %s (%s)", package_id, bank_key)
+                logger.error("App not found: %s", package_id)
                 return collected
             except Exception as exc:
-                logger.warning("Scrape error for %s: %s", bank_key, exc)
+                logger.warning("%s scrape error: %s", bank_key, exc)
                 break
 
             if not batch:
                 break
 
             for item in batch:
-                if len(collected) >= target_count:
+                if len(collected) >= target:
                     break
                 collected.append(
                     {
                         "review": (item.get("content") or "").strip(),
                         "rating": item.get("score"),
-                        "date": _parse_review_date(item.get("at")),
+                        "date": _parse_date(item.get("at")),
                         "bank": bank_name,
                         "app_name": app_name,
                         "source": SOURCE_LABEL,
                         "review_id_play": item.get("reviewId"),
                     }
                 )
-
-            if len(collected) >= target_count or continuation_token is None:
+            time.sleep(0.5)
+            if token is None:
                 break
 
-    logger.info("%s: collected %d reviews (target %d)", bank_key, len(collected), target_count)
-    return collected[:target_count] if len(collected) > target_count else collected
+    logger.info("%s: scraped %d (target %d)", bank_key, len(collected), target)
+    return collected
 
 
-def scrape_all_banks() -> list[dict[str, Any]]:
-    """Scrape reviews for all configured banks."""
-    all_rows: list[dict[str, Any]] = []
-
-    for bank_key, meta in BANK_APPS.items():
-        rows = scrape_app_reviews(
-            package_id=meta["package_id"],
-            bank_key=bank_key,
-            app_name=meta["app_name"],
-            bank_name=meta["bank_name"],
-            target_count=MIN_REVIEWS_PER_BANK,
+def scrape_all_banks() -> pd.DataFrame:
+    rows: list[dict[str, Any]] = []
+    for key, meta in BANK_APPS.items():
+        batch = scrape_app_reviews(
+            meta["package_id"], key, meta["bank_name"], meta["app_name"]
         )
-        for row in rows:
-            row["bank_key"] = bank_key
-        all_rows.extend(rows)
-
-    dates = [r["date"] for r in all_rows if r.get("date")]
-    if dates:
-        logger.info("Date range: %s to %s", min(dates), max(dates))
-
-    return all_rows
+        rows.extend(batch)
+    return pd.DataFrame(rows)
 
 
-def save_raw_reviews(rows: list[dict[str, Any]], path: Path = RAW_REVIEWS_CSV) -> Path:
-    """Persist raw scrape to CSV."""
-    if not rows:
-        raise ValueError("No reviews to save")
-    fieldnames = list(rows[0].keys())
-    return write_csv_rows(path, rows, fieldnames=fieldnames)
+def save_raw(df: pd.DataFrame) -> None:
+    DATA_RAW_DIR.mkdir(parents=True, exist_ok=True)
+    df.to_csv(RAW_REVIEWS_CSV, index=False)
 
-
-def save_scrape_metadata(rows: list[dict[str, Any]]) -> Path:
-    """Write scrape run summary for README / report documentation."""
-    per_bank: dict[str, int] = {}
-    for row in rows:
-        bank = row.get("bank", "unknown")
-        per_bank[bank] = per_bank.get(bank, 0) + 1
-
-    dates = sorted(r["date"] for r in rows if r.get("date"))
-    metadata = {
-        "scraped_at": datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ"),
+    per_bank = df.groupby("bank").size().to_dict() if not df.empty else {}
+    dates = pd.to_datetime(df["date"], errors="coerce").dropna() if "date" in df else pd.Series()
+    meta = {
+        "scraped_at": datetime.utcnow().isoformat() + "Z",
         "lang": SCRAPE_LANG,
         "country": SCRAPE_COUNTRY,
         "sort_orders": ["NEWEST", "MOST_RELEVANT"],
         "target_per_bank": MIN_REVIEWS_PER_BANK,
-        "total_reviews": len(rows),
+        "total_reviews": len(df),
         "reviews_per_bank": per_bank,
-        "date_range": {"min": dates[0], "max": dates[-1]} if dates else None,
-        "apps": {
-            k: {"package_id": v["package_id"], "app_name": v["app_name"]}
-            for k, v in BANK_APPS.items()
+        "date_range": {
+            "min": str(dates.min().date()) if len(dates) else None,
+            "max": str(dates.max().date()) if len(dates) else None,
         },
+        "apps": {k: v["package_id"] for k, v in BANK_APPS.items()},
     }
-    SCRAPE_METADATA_PATH.parent.mkdir(parents=True, exist_ok=True)
-    SCRAPE_METADATA_PATH.write_text(json.dumps(metadata, indent=2), encoding="utf-8")
-    logger.info("Scrape metadata saved to %s", SCRAPE_METADATA_PATH)
-    return SCRAPE_METADATA_PATH
+    SCRAPE_METADATA_JSON.write_text(json.dumps(meta, indent=2), encoding="utf-8")
+    logger.info("Raw data: %s (%d rows)", RAW_REVIEWS_CSV, len(df))
 
 
-def run_scrape() -> list[dict[str, Any]]:
-    """Entry point: scrape all banks and save raw CSV + metadata."""
-    DATA_RAW_DIR.mkdir(parents=True, exist_ok=True)
-    rows = scrape_all_banks()
-    if rows:
-        save_raw_reviews(rows)
-        save_scrape_metadata(rows)
-    return rows
+def run_scrape() -> pd.DataFrame:
+    df = scrape_all_banks()
+    if not df.empty:
+        save_raw(df)
+    return df

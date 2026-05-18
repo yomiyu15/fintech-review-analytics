@@ -1,1 +1,0 @@
-"""Fintech review analytics pipeline."""

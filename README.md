@@ -1,65 +1,47 @@
-# Fintech Review Analytics
+# Fintech Review Analytics — Task 1
 
-Customer experience analytics for **Commercial Bank of Ethiopia (CBE)**, **Bank of Abyssinia (BOA)**, and **Dashen Bank** Google Play Store reviews.
+Omega Consultancy: scrape and preprocess Google Play reviews for **CBE**, **BOA**, and **Dashen Bank**.
 
-## Task 1 checklist
+## Quick start
 
-| Requirement | Status |
-|-------------|--------|
-| Scrape ≥400 reviews per bank | Done (412 / 432 / 433 after cleaning) |
-| Fields: review, rating, date, bank, source | Done |
-| Remove duplicates & missing values | Done (2.15% removed) |
-| Dates normalized to `YYYY-MM-DD` | Done |
-| `reviews_clean.csv` (gitignored) | `data/processed/reviews_clean.csv` |
-| Preprocessing script with documentation | `src/preprocess.py` |
-| Scraping script | `src/scrape_reviews.py` |
-| README methodology & limitations | Below |
-| `.gitignore` excludes `data/`, `*.csv` | Done |
-| CI runs on push | `.github/workflows/unittests.yml` |
-| Branch `task-1` with conventional commit | Done |
-
-## Task 1 — Data collection & preprocessing (complete)
-
-### Run Task 1
-
-```powershell
-cd d:\fintech-review-analytics
-pip install -r requirements-task1.txt
+```bash
+pip install -r requirements.txt
 python scripts/scrape_and_preprocess.py
 ```
 
-Outputs (gitignored):
+**Output:** `data/processed/reviews_clean.csv` (gitignored)
 
-| File | Description |
-|------|-------------|
-| `data/raw/reviews_raw.csv` | Raw scrape |
-| `data/raw/scrape_metadata.json` | Methodology stats |
-| `data/processed/reviews_clean.csv` | **Deliverable** — 5 columns |
-| `data/processed/reviews_clean_with_id.csv` | Same + `review_id` for later tasks |
-| `data/processed/data_quality_report.json` | Dedup / missing-value counts |
+## Scraping methodology
 
-### Scraping methodology
+| Bank | Package ID |
+|------|------------|
+| Commercial Bank of Ethiopia | `com.combanketh.mobilebanking` |
+| Bank of Abyssinia | `com.boa.boaMobileBanking` |
+| Dashen Bank | `com.dashen.dashensuperapp` |
 
-| Bank | App | Package ID |
-|------|-----|------------|
-| CBE | Commercial Bank of Ethiopia Mobile | `com.combanketh.mobilebanking` |
-| BOA | BoA Mobile | `com.boa.boaMobileBanking` |
-| Dashen | Dashen Bank (Super App) | `com.dashen.dashensuperapp` |
+- **Tool:** [google-play-scraper](https://github.com/JoMingyu/google-play-scraper)
+- **Locale:** `lang=en`, `country=et`
+- **Sort:** NEWEST, then MOST_RELEVANT
+- **Pagination:** `continuation_token`, 200 reviews per batch
+- **Target:** 435 raw reviews per bank (buffer for deduplication)
 
-- **Library:** [google-play-scraper](https://github.com/JoMingyu/google-play-scraper)
-- **Locale:** `lang=en`, `country=us`
-- **Sort:** `NEWEST`, then `MOST_RELEVANT` if more reviews needed
-- **Pagination:** 200 reviews per request via `continuation_token`
-- **Target:** 435 raw per bank (buffer for duplicate removal)
+## Preprocessing (`src/preprocess.py`)
 
-### Latest run results
+1. Remove duplicates (review + bank + date)
+2. Drop rows missing review text or rating
+3. Normalize dates to `YYYY-MM-DD`
+4. Validate ratings 1–5
+5. Export: `review`, `rating`, `date`, `bank`, `source`
 
-| Metric | Value |
-|--------|-------|
+## Task 1 results (verified run)
+
+| Metric | Result |
+|--------|--------|
 | Raw reviews scraped | 1,305 |
-| Clean reviews (after dedup) | **1,277** |
+| Clean reviews | **1,277** |
 | Data loss | **2.15%** (< 5% KPI) |
-| Date range | 2025-05-06 → 2026-05-17 |
+| Date range | **2025-05-06 → 2026-05-17** |
+| Unit tests | **8/8 passed** |
 
 | Bank | Clean reviews |
 |------|---------------|
@@ -67,55 +49,40 @@ Outputs (gitignored):
 | Bank of Abyssinia | 432 |
 | Dashen Bank | 433 |
 
-### Preprocessing (`src/preprocess.py`)
+## Task 1 checklist
 
-1. Remove duplicates (same review text + bank + date; Play Store review ID if present)
-2. Drop rows missing review text or rating
-3. Normalize dates to `YYYY-MM-DD`
-4. Validate ratings as integers 1–5
-5. Export columns: `review`, `rating`, `date`, `bank`, `source`
+| Requirement | Status |
+|-------------|--------|
+| ≥400 reviews per bank | Done |
+| <5% missing data | Done (2.15%) |
+| Clean CSV columns | `review`, `rating`, `date`, `bank`, `source` |
+| `.gitignore` excludes `data/`, `*.csv` | Yes |
+| CI: `pip install -r requirements.txt` on push to `main` | `.github/workflows/unittests.yml` |
+| Branch `task-1` + Conventional Commits | Commit pending (see below) |
 
-### Limitations
+## Limitations
 
-- English-only scrape (`lang=en`) may miss Amharic reviews.
-- Play Store may return overlapping reviews across sort orders; dedup removes ~2%.
-- Store-wide star ratings (e.g. CBE 4.2★) reflect all users; this sample is recent English reviews.
-
----
-
-## Later tasks (not required for Task 1)
-
-| Task | Command |
-|------|---------|
-| 2 — Sentiment & themes | `pip install -r requirements.txt` then `python scripts/run_sentiment_analysis.py` |
-| 3 — PostgreSQL | `python scripts/load_to_postgres.py` |
-| 4 — Insights & plots | `python scripts/generate_insights.py` |
-
-See `sql/schema.sql` for database setup in pgAdmin.
+- English scrape may miss Amharic reviews.
+- Play Store caps historical depth; we use two sort orders to maximize yield.
+- Duplicate overlap across sort orders is removed (~2%).
 
 ## Project structure
 
 ```
-scripts/scrape_and_preprocess.py   # Task 1 entry point
-src/scrape_reviews.py
-src/preprocess.py
-src/io_utils.py
-tests/test_preprocess.py
-requirements-task1.txt             # google-play-scraper only
-requirements.txt                   # full pipeline
+fintech-review-analytics/
+├── data/raw/              # reviews_raw.csv, scrape_metadata.json
+├── data/processed/        # reviews_clean.csv, data_quality_report.json
+├── src/scrape_reviews.py
+├── src/preprocess.py
+├── scripts/scrape_and_preprocess.py
+└── tests/
 ```
 
-## CI
+## Git
 
-`.github/workflows/unittests.yml` runs `pytest` on push to `main`.
-
-## Git branches (recommended)
-
-```text
-task-1  → scrape + preprocess (this task)
-task-2  → sentiment analysis
-task-3  → PostgreSQL
-task-4  → visualizations + report
+```bash
+git checkout task-1
+git add .
+git commit -m "feat(scrape): update Task 1 pipeline"
+git push -u origin task-1
 ```
-
-Use Conventional Commits, e.g. `feat(scrape): collect 1,277 Play Store reviews`.
