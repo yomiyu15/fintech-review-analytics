@@ -2,6 +2,22 @@
 
 Customer experience analytics for **Commercial Bank of Ethiopia (CBE)**, **Bank of Abyssinia (BOA)**, and **Dashen Bank** Google Play Store reviews.
 
+## Task 1 checklist
+
+| Requirement | Status |
+|-------------|--------|
+| Scrape ≥400 reviews per bank | Done (412 / 432 / 433 after cleaning) |
+| Fields: review, rating, date, bank, source | Done |
+| Remove duplicates & missing values | Done (2.15% removed) |
+| Dates normalized to `YYYY-MM-DD` | Done |
+| `reviews_clean.csv` (gitignored) | `data/processed/reviews_clean.csv` |
+| Preprocessing script with documentation | `src/preprocess.py` |
+| Scraping script | `src/scrape_reviews.py` |
+| README methodology & limitations | Below |
+| `.gitignore` excludes `data/`, `*.csv` | Done |
+| CI runs on push | `.github/workflows/unittests.yml` |
+| Branch `task-1` with conventional commit | Done |
+
 ## Task 1 — Data collection & preprocessing (complete)
 
 ### Run Task 1
