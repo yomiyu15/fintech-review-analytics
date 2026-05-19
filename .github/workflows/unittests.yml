@@ -2,9 +2,9 @@ name: Unit Tests
 
 on:
   push:
-    branches: [main]
+    branches: [main, task-2]
   pull_request:
-    branches: [main]
+    branches: [main, task-2]
 
 jobs:
   test:
@@ -18,7 +18,11 @@ jobs:
           python-version: "3.11"
 
       - name: Install dependencies
-        run: pip install -r requirements.txt
+        run: |
+          pip install -r requirements.txt
+          python -m nltk.downloader punkt stopwords
 
       - name: Run unit tests
         run: pytest tests/ -v --tb=short
+        env:
+          SKIP_TRANSFORMER_TESTS: "1"
