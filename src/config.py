@@ -16,6 +16,7 @@ THEME_SUMMARY_JSON = DATA_PROCESSED_DIR / "theme_summary.json"
 SCRAPE_METADATA_JSON = DATA_RAW_DIR / "scrape_metadata.json"
 QUALITY_REPORT_JSON = DATA_PROCESSED_DIR / "data_quality_report.json"
 THEME_GROUPING_MD = DOCS_DIR / "THEME_GROUPING.md"
+DB_NAME = "bank_reviews"
 
 SOURCE_LABEL = "Google Play"
 MIN_REVIEWS_PER_BANK = 435  # buffer so ≥400 remain after deduplication
