@@ -1,0 +1,445 @@
+{
+  "comparison": {
+    "summary": [
+      {
+        "bank": "Commercial Bank of Ethiopia",
+        "bank_short": "CBE",
+        "n_reviews": 412,
+        "avg_rating": 4.1,
+        "pct_positive": 61.7,
+        "pct_negative": 27.4,
+        "pct_non_english": 10.4,
+        "mean_sentiment_score": 0.989,
+        "top_theme": "Transaction Performance"
+      },
+      {
+        "bank": "Bank of Abyssinia",
+        "bank_short": "BOA",
+        "n_reviews": 432,
+        "avg_rating": 3.63,
+        "pct_positive": 51.6,
+        "pct_negative": 38.7,
+        "pct_non_english": 9.5,
+        "mean_sentiment_score": 0.983,
+        "top_theme": "Transaction Performance"
+      },
+      {
+        "bank": "Dashen Bank",
+        "bank_short": "Dashen",
+        "n_reviews": 433,
+        "avg_rating": 3.98,
+        "pct_positive": 63.7,
+        "pct_negative": 29.1,
+        "pct_non_english": 7.2,
+        "mean_sentiment_score": 0.985,
+        "top_theme": "UI & Design"
+      }
+    ],
+    "theme_counts": [
+      {
+        "bank": "Bank of Abyssinia",
+        "identified_theme": "Stability & Crashes",
+        "count": 25
+      },
+      {
+        "bank": "Bank of Abyssinia",
+        "identified_theme": "Transaction Performance",
+        "count": 25
+      },
+      {
+        "bank": "Bank of Abyssinia",
+        "identified_theme": "Feature Requests",
+        "count": 18
+      },
+      {
+        "bank": "Bank of Abyssinia",
+        "identified_theme": "UI & Design",
+        "count": 16
+      },
+      {
+        "bank": "Bank of Abyssinia",
+        "identified_theme": "Customer Support",
+        "count": 14
+      },
+      {
+        "bank": "Bank of Abyssinia",
+        "identified_theme": "Account Access Issues",
+        "count": 11
+      },
+      {
+        "bank": "Commercial Bank of Ethiopia",
+        "identified_theme": "Transaction Performance",
+        "count": 33
+      },
+      {
+        "bank": "Commercial Bank of Ethiopia",
+        "identified_theme": "Feature Requests",
+        "count": 21
+      },
+      {
+        "bank": "Commercial Bank of Ethiopia",
+        "identified_theme": "UI & Design",
+        "count": 20
+      },
+      {
+        "bank": "Commercial Bank of Ethiopia",
+        "identified_theme": "Customer Support",
+        "count": 16
+      },
+      {
+        "bank": "Commercial Bank of Ethiopia",
+        "identified_theme": "Stability & Crashes",
+        "count": 11
+      },
+      {
+        "bank": "Commercial Bank of Ethiopia",
+        "identified_theme": "Account Access Issues",
+        "count": 3
+      },
+      {
+        "bank": "Dashen Bank",
+        "identified_theme": "UI & Design",
+        "count": 46
+      },
+      {
+        "bank": "Dashen Bank",
+        "identified_theme": "Transaction Performance",
+        "count": 35
+      },
+      {
+        "bank": "Dashen Bank",
+        "identified_theme": "Feature Requests",
+        "count": 27
+      },
+      {
+        "bank": "Dashen Bank",
+        "identified_theme": "Customer Support",
+        "count": 13
+      },
+      {
+        "bank": "Dashen Bank",
+        "identified_theme": "Account Access Issues",
+        "count": 8
+      },
+      {
+        "bank": "Dashen Bank",
+        "identified_theme": "Stability & Crashes",
+        "count": 5
+      }
+    ]
+  },
+  "per_bank": {
+    "Bank of Abyssinia": {
+      "drivers": [
+        {
+          "title": "Intuitive UI and ease of use",
+          "summary": "5 positive UI & Design reviews (1.2% of BOA reviews).",
+          "evidence": {
+            "theme": "UI & Design",
+            "count": 5,
+            "share_of_bank_pct": 1.2,
+            "sample_quotes": [
+              "it is simple and fast app",
+              "fast and simple"
+            ]
+          }
+        },
+        {
+          "title": "Responsive customer support",
+          "summary": "10 positive Customer Support mentions (2.3% of reviews).",
+          "evidence": {
+            "theme": "Customer Support",
+            "count": 10,
+            "share_of_bank_pct": 2.3,
+            "sample_quotes": [
+              "office branches have to improve their services please",
+              "excellent service"
+            ]
+          }
+        },
+        {
+          "title": "Speed and reliability",
+          "summary": "12 positive reviews cite speed/ease/reliability (2.8% of reviews).",
+          "evidence": {
+            "label": "Speed and reliability",
+            "count": 12,
+            "share_of_bank_pct": 2.8,
+            "sample_quotes": [
+              "fast",
+              "fast security \ud83d\udd25\ud83d\udd25\ud83d\udd25"
+            ]
+          }
+        }
+      ],
+      "pains": [
+        {
+          "title": "Slow or failed transactions",
+          "summary": "24 negative Transaction Performance reviews (5.6% of reviews).",
+          "evidence": {
+            "theme": "Transaction Performance",
+            "count": 24,
+            "share_of_bank_pct": 5.6,
+            "sample_quotes": [
+              "i can't transfer money to other bank. \ud83d\ude12\ud83d\ude12",
+              "i m sorry but it doesn't work for my android it is too slow but other bank are very fast please update"
+            ]
+          }
+        },
+        {
+          "title": "App crashes and instability",
+          "summary": "25 negative Stability & Crashes reviews (5.8% of reviews).",
+          "evidence": {
+            "theme": "Stability & Crashes",
+            "count": 25,
+            "share_of_bank_pct": 5.8,
+            "sample_quotes": [
+              "the app not works on samsung galaxy A06 models it's directly kick you out of the app whenever u want to use it amd and then it's says the...",
+              "it is not working on redminote 11 pro+ pls fix it"
+            ]
+          }
+        },
+        {
+          "title": "Login, OTP, and account access failures",
+          "summary": "9 negative Account Access Issues (2.1% of reviews).",
+          "evidence": {
+            "theme": "Account Access Issues",
+            "count": 9,
+            "share_of_bank_pct": 2.1,
+            "sample_quotes": [
+              "i entered incorrect security question by mistake boa app lock pin forever, why is there no other options? ?? i contacted different branch...",
+              "when i try to see my balance the app logs me out.i try to uninstall the app and install it when i try to login again it says login expire..."
+            ]
+          }
+        }
+      ],
+      "recommendations": [
+        {
+          "priority": "P1",
+          "recommendation": "Invest in transfer/payment performance: add end-to-end transaction tracing, proactive push notifications on pending/failed payments, and a dedicated \"payment status\" screen for BOA users.",
+          "grounds": "Transaction Performance is a top negative theme in review data."
+        },
+        {
+          "priority": "P1",
+          "recommendation": "Launch a stability sprint for BOA: crash reporting (Firebase/Crashlytics), device/OS matrix testing, and hotfix channel for force-close issues.",
+          "grounds": "Stability & Crashes appears frequently in negative reviews (esp. BOA)."
+        },
+        {
+          "priority": "P1",
+          "recommendation": "Redesign OTP/login flow for BOA: SMS fallback, clearer error messages, and in-app \"resend OTP\" with rate-limit transparency.",
+          "grounds": "Account Access Issues and OTP/login keywords in negative reviews."
+        },
+        {
+          "priority": "P2",
+          "recommendation": "Protect BOA's UI strengths: usability testing on major flows, dark mode, and accessibility (font size, Amharic/English toggle).",
+          "grounds": "UI & Design is a documented satisfaction driver."
+        }
+      ]
+    },
+    "Commercial Bank of Ethiopia": {
+      "drivers": [
+        {
+          "title": "Intuitive UI and ease of use",
+          "summary": "15 positive UI & Design reviews (3.6% of CBE reviews).",
+          "evidence": {
+            "theme": "UI & Design",
+            "count": 15,
+            "share_of_bank_pct": 3.6,
+            "sample_quotes": [
+              "easy and fast",
+              "it's fast and easy nice"
+            ]
+          }
+        },
+        {
+          "title": "Responsive customer support",
+          "summary": "11 positive Customer Support mentions (2.7% of reviews).",
+          "evidence": {
+            "theme": "Customer Support",
+            "count": 11,
+            "share_of_bank_pct": 2.7,
+            "sample_quotes": [
+              "i like cbe service",
+              "excellent service"
+            ]
+          }
+        },
+        {
+          "title": "Speed and reliability",
+          "summary": "20 positive reviews cite speed/ease/reliability (4.9% of reviews).",
+          "evidence": {
+            "label": "Speed and reliability",
+            "count": 20,
+            "share_of_bank_pct": 4.9,
+            "sample_quotes": [
+              "fast and time saving...",
+              "easygoing & Convenient to use."
+            ]
+          }
+        }
+      ],
+      "pains": [
+        {
+          "title": "Slow or failed transactions",
+          "summary": "25 negative Transaction Performance reviews (6.1% of reviews).",
+          "evidence": {
+            "theme": "Transaction Performance",
+            "count": 25,
+            "share_of_bank_pct": 6.1,
+            "sample_quotes": [
+              "notwork totransferto other",
+              "it's v good app sometimes there is a problem on other bank transfers"
+            ]
+          }
+        },
+        {
+          "title": "App crashes and instability",
+          "summary": "10 negative Stability & Crashes reviews (2.4% of reviews).",
+          "evidence": {
+            "theme": "Stability & Crashes",
+            "count": 10,
+            "share_of_bank_pct": 2.4,
+            "sample_quotes": [
+              "I can't use the app months ago. It stopped working with Mobile data and WiFi. I didn't know the cause. Why this app is not compatible wit...",
+              "I like it but sometimes there is a system error"
+            ]
+          }
+        }
+      ],
+      "recommendations": [
+        {
+          "priority": "P1",
+          "recommendation": "Invest in transfer/payment performance: add end-to-end transaction tracing, proactive push notifications on pending/failed payments, and a dedicated \"payment status\" screen for CBE users.",
+          "grounds": "Transaction Performance is a top negative theme in review data."
+        },
+        {
+          "priority": "P1",
+          "recommendation": "Launch a stability sprint for CBE: crash reporting (Firebase/Crashlytics), device/OS matrix testing, and hotfix channel for force-close issues.",
+          "grounds": "Stability & Crashes appears frequently in negative reviews (esp. BOA)."
+        },
+        {
+          "priority": "P2",
+          "recommendation": "Protect CBE's UI strengths: usability testing on major flows, dark mode, and accessibility (font size, Amharic/English toggle).",
+          "grounds": "UI & Design is a documented satisfaction driver."
+        },
+        {
+          "priority": "P3",
+          "recommendation": "Scale in-app chat and branch callback for CBE; promote support channels where positive Customer Support reviews cluster.",
+          "grounds": "Customer Support cited positively in themed reviews."
+        }
+      ]
+    },
+    "Dashen Bank": {
+      "drivers": [
+        {
+          "title": "Intuitive UI and ease of use",
+          "summary": "40 positive UI & Design reviews (9.2% of Dashen reviews).",
+          "evidence": {
+            "theme": "UI & Design",
+            "count": 40,
+            "share_of_bank_pct": 9.2,
+            "sample_quotes": [
+              "easy to use, friendly",
+              "The Dashen Super App is very impressive. It is fast, easy to use, and provides smooth access to all essential banking services. Money tra..."
+            ]
+          }
+        },
+        {
+          "title": "Responsive customer support",
+          "summary": "8 positive Customer Support mentions (1.8% of reviews).",
+          "evidence": {
+            "theme": "Customer Support",
+            "count": 8,
+            "share_of_bank_pct": 1.8,
+            "sample_quotes": [
+              "The most realistic and modernized financial service in ethiopia i recommend every individual to use this application probably. Always one...",
+              "your service is too good"
+            ]
+          }
+        },
+        {
+          "title": "Speed and reliability",
+          "summary": "39 positive reviews cite speed/ease/reliability (9.0% of reviews).",
+          "evidence": {
+            "label": "Speed and reliability",
+            "count": 39,
+            "share_of_bank_pct": 9.0,
+            "sample_quotes": [
+              "Super Up is the ultimate digital banking app, living up to its name with speed, efficiency, and innovation. Designed for a seamless exper...",
+              "App That makes cashless society in our century and Easy to use."
+            ]
+          }
+        }
+      ],
+      "pains": [
+        {
+          "title": "Slow or failed transactions",
+          "summary": "23 negative Transaction Performance reviews (5.3% of reviews).",
+          "evidence": {
+            "theme": "Transaction Performance",
+            "count": 23,
+            "share_of_bank_pct": 5.3,
+            "sample_quotes": [
+              "Very disappointing app. Other bank transfers don\u2019t work at all I keep getting errors. It\u2019s slow, unreliable, and frustrating Please fix t...",
+              "The most unreliable, frustrating and worst app I have ever used! imagine being in a restaurant and trying paying bills, but not processin..."
+            ]
+          }
+        },
+        {
+          "title": "App crashes and instability",
+          "summary": "5 negative Stability & Crashes reviews (1.2% of reviews).",
+          "evidence": {
+            "theme": "Stability & Crashes",
+            "count": 5,
+            "share_of_bank_pct": 1.2,
+            "sample_quotes": [
+              "it is not working",
+              "Before the recent update, this app was great. Now, the home page is cluttered with promotions and banners, which really hurts the experie..."
+            ]
+          }
+        },
+        {
+          "title": "Login, OTP, and account access failures",
+          "summary": "8 negative Account Access Issues (1.8% of reviews).",
+          "evidence": {
+            "theme": "Account Access Issues",
+            "count": 8,
+            "share_of_bank_pct": 1.8,
+            "sample_quotes": [
+              "I am experiencing a serious issue with the Dashen Super App. I visited a branch and my account was successfully activated. However, short...",
+              "it takes time to login. but after login its good but sometimes unexpected termination occur in which rises untrust to use usually the app..."
+            ]
+          }
+        }
+      ],
+      "recommendations": [
+        {
+          "priority": "P1",
+          "recommendation": "Invest in transfer/payment performance: add end-to-end transaction tracing, proactive push notifications on pending/failed payments, and a dedicated \"payment status\" screen for Dashen users.",
+          "grounds": "Transaction Performance is a top negative theme in review data."
+        },
+        {
+          "priority": "P1",
+          "recommendation": "Launch a stability sprint for Dashen: crash reporting (Firebase/Crashlytics), device/OS matrix testing, and hotfix channel for force-close issues.",
+          "grounds": "Stability & Crashes appears frequently in negative reviews (esp. BOA)."
+        },
+        {
+          "priority": "P1",
+          "recommendation": "Redesign OTP/login flow for Dashen: SMS fallback, clearer error messages, and in-app \"resend OTP\" with rate-limit transparency.",
+          "grounds": "Account Access Issues and OTP/login keywords in negative reviews."
+        },
+        {
+          "priority": "P2",
+          "recommendation": "Protect Dashen's UI strengths: usability testing on major flows, dark mode, and accessibility (font size, Amharic/English toggle).",
+          "grounds": "UI & Design is a documented satisfaction driver."
+        }
+      ]
+    }
+  },
+  "ethics_notes": [
+    "**Negativity bias:** Play Store reviewers often post after a bad experience; sentiment and themes may over-represent problems versus silent satisfied users.",
+    "**English-only sentiment:** Amharic and mixed-language reviews are labeled `non_english` without a transformer score; English-only scraping (`lang=en`) under-samples Amharic feedback.",
+    "**Temporal sampling:** Reviews span roughly one year (scrape window); seasonal campaigns or app releases may skew theme counts.",
+    "**Keyword themes:** Rule-based themes miss nuance; sarcasm and context can be misclassified.",
+    "**Survivorship:** Users who uninstall without reviewing are invisible in this dataset."
+  ]
+}
