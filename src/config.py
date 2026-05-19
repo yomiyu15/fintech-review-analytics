@@ -18,6 +18,19 @@ QUALITY_REPORT_JSON = DATA_PROCESSED_DIR / "data_quality_report.json"
 THEME_GROUPING_MD = DOCS_DIR / "THEME_GROUPING.md"
 DB_NAME = "bank_reviews"
 
+# Task 4 — insights & report
+REPORTS_DIR = PROJECT_ROOT / "reports"
+REPORT_FIGURES_DIR = REPORTS_DIR / "figures"
+INSIGHTS_REPORT_MD = REPORTS_DIR / "insights_report.md"
+INSIGHTS_REPORT_PDF = REPORTS_DIR / "insights_report.pdf"
+INSIGHTS_SUMMARY_JSON = REPORTS_DIR / "insights_summary.json"
+
+BANK_SHORT_NAMES = {
+    "Commercial Bank of Ethiopia": "CBE",
+    "Bank of Abyssinia": "BOA",
+    "Dashen Bank": "Dashen",
+}
+
 SOURCE_LABEL = "Google Play"
 MIN_REVIEWS_PER_BANK = 435  # buffer so ≥400 remain after deduplication
 SCRAPE_BATCH_SIZE = 200

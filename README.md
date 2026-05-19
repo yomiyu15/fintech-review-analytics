@@ -79,6 +79,8 @@ fintech-review-analytics/
 ├── scripts/scrape_and_preprocess.py
 ├── scripts/run_sentiment_analysis.py
 ├── scripts/load_to_postgres.py
+├── scripts/generate_insights_report.py
+├── reports/                 # insights_report.md, .pdf, figures/
 └── tests/
 ```
 
@@ -200,11 +202,53 @@ Or use the Python verification report: `data/processed/db_verification.json`.
 | README setup docs | This section |
 | Branch `task-3` + PR | Commit & push when ready |
 
+---
+
+## Task 4 — Insights & recommendations
+
+### Generate report
+
+Requires `data/processed/reviews_analyzed.csv` from Task 2.
+
+```bash
+pip install -r requirements.txt
+python scripts/generate_insights_report.py
+```
+
+### Outputs (committed to `reports/`)
+
+| File | Description |
+|------|-------------|
+| `reports/insights_report.md` | Medium-style narrative report |
+| `reports/insights_report.pdf` | PDF version (≤10 pages) |
+| `reports/insights_summary.json` | Structured drivers, pains, recommendations |
+| `reports/figures/*.png` | 5 labeled charts |
+
+### Visualizations (5)
+
+1. Sentiment distribution by bank (stacked bar)
+2. Rating distribution per bank (boxplot)
+3. Theme frequency per bank (horizontal bars)
+4. Sentiment trend over time (monthly % positive)
+5. Average star rating comparison (bar)
+
+### Task 4 checklist
+
+| Requirement | Status |
+|-------------|--------|
+| 2+ drivers & 2+ pain points per bank (with evidence) | `src/insights.py` |
+| Cross-bank comparison | Report + `insights_summary.json` |
+| 2+ recommendations per bank | In report |
+| 3–5 plots, labeled | `reports/figures/` |
+| Ethics / bias section | Report |
+| PDF report | `reports/insights_report.pdf` |
+| Branch `task-4` + PR | Commit & push when ready |
+
 ## Git
 
 ```bash
-git checkout task-3
-git add .
-git commit -m "feat(db): add PostgreSQL schema and load pipeline"
-git push -u origin task-3
+git checkout task-4
+git add reports/ src/insights.py scripts/generate_insights_report.py tests/test_insights.py
+git commit -m "feat(insights): add Task 4 visualizations and recommendations report"
+git push -u origin task-4
 ```
