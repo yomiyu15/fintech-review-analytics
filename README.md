@@ -71,10 +71,14 @@ python scripts/scrape_and_preprocess.py
 ```
 fintech-review-analytics/
 ├── data/raw/              # reviews_raw.csv, scrape_metadata.json
-├── data/processed/        # reviews_clean.csv, data_quality_report.json
+├── data/processed/        # reviews_clean.csv, reviews_analyzed.csv
+├── db/                    # schema.sql, verification_queries.sql
 ├── src/scrape_reviews.py
 ├── src/preprocess.py
+├── src/database.py
 ├── scripts/scrape_and_preprocess.py
+├── scripts/run_sentiment_analysis.py
+├── scripts/load_to_postgres.py
 └── tests/
 ```
 
@@ -138,11 +142,69 @@ python scripts/run_sentiment_analysis.py
 | ≥400 reviews with sentiment (English subset) | ~1,162 on full clean corpus |
 | Branch `task-2` + PR to `main` | Commit & push when ready |
 
+---
+
+## Task 3 — PostgreSQL storage
+
+### Prerequisites
+
+1. Install [PostgreSQL](https://www.postgresql.org/download/) (15+).
+2. Create database: `CREATE DATABASE bank_reviews;` (pgAdmin or `psql`).
+3. Copy credentials: `copy .env.example .env` and set `PGPASSWORD`.
+
+### Schema
+
+| Table | Purpose |
+|-------|---------|
+| `banks` | `bank_id`, `bank_name`, `app_name` |
+| `reviews` | `review_id`, `bank_id` (FK), `review_text`, `rating`, `review_date`, `sentiment_label`, `sentiment_score`, `identified_theme`, `source` |
+
+DDL: [`db/schema.sql`](db/schema.sql)
+
+### Load data
+
+Requires `data/processed/reviews_analyzed.csv` from Tasks 1–2.
+
+```bash
+pip install -r requirements.txt
+python scripts/load_to_postgres.py
+```
+
+Options: `--truncate` (reload), `--verify-only` (queries only).
+
+### Verify (SQL)
+
+```bash
+psql -U postgres -d bank_reviews -f db/verification_queries.sql
+```
+
+Or use the Python verification report: `data/processed/db_verification.json`.
+
+| Check | Query / output |
+|-------|----------------|
+| Reviews per bank | `reviews_per_bank` in verification JSON |
+| Avg rating per bank | `avg_rating_per_bank` |
+| Null key columns | `null_counts` (expect all 0) |
+| Total rows KPI | `total_reviews` > 1,000 |
+
+### Task 3 checklist
+
+| Requirement | Status |
+|-------------|--------|
+| Database `bank_reviews` | User-created |
+| `banks` + `reviews` tables | `db/schema.sql` |
+| Python insert script | `scripts/load_to_postgres.py` |
+| >1,000 reviews loaded | After full pipeline load |
+| Schema in Git | `db/schema.sql` |
+| Verification queries | `db/verification_queries.sql` |
+| README setup docs | This section |
+| Branch `task-3` + PR | Commit & push when ready |
+
 ## Git
 
 ```bash
-git checkout task-2
+git checkout task-3
 git add .
-git commit -m "feat(nlp): add Task 2 sentiment and thematic analysis"
-git push -u origin task-2
+git commit -m "feat(db): add PostgreSQL schema and load pipeline"
+git push -u origin task-3
 ```
