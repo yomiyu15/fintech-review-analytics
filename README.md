@@ -1,6 +1,6 @@
-# Fintech Review Analytics — Task 1
+# Fintech Review Analytics
 
-Omega Consultancy: scrape and preprocess Google Play reviews for **CBE**, **BOA**, and **Dashen Bank**.
+Omega Consultancy: Play Store review analytics for **CBE**, **BOA**, and **Dashen Bank**.
 
 ## Quick start
 
@@ -78,11 +78,71 @@ fintech-review-analytics/
 └── tests/
 ```
 
+---
+
+## Task 2 — Sentiment & thematic analysis
+
+### Quick start
+
+```bash
+pip install -r requirements.txt
+python -m nltk.downloader punkt stopwords
+python -m spacy download en_core_web_sm   # optional, for lemmatization
+python scripts/run_sentiment_analysis.py
+```
+
+**Requires:** `data/processed/reviews_clean.csv` from Task 1.
+
+### Outputs (gitignored)
+
+| File | Description |
+|------|-------------|
+| `data/processed/reviews_sentiment_export.csv` | `review_id`, `review_text`, `sentiment_label`, `sentiment_score`, `identified_theme` |
+| `data/processed/reviews_analyzed.csv` | Full table (+ bank, rating, date, `is_english`) |
+| `data/processed/sentiment_summary.json` | Aggregates by bank and rating |
+| `data/processed/theme_summary.json` | Themes + keywords per bank |
+| `docs/THEME_GROUPING.md` | Theme taxonomy and grouping logic |
+
+### Sentiment (English only)
+
+- **Model:** `distilbert-base-uncased-finetuned-sst-2-english` (Hugging Face)
+- **Why:** Strong on short informal English text vs. lexicon-only tools (VADER/TextBlob).
+- **Neutral:** positive-class probability between 0.45–0.55.
+- **Non-English reviews** (Amharic / Ethiopic script): label `non_english`, no transformer score; themes still assigned. There is no reliable Amharic sentiment model in this pipeline — English-only scoring is intentional.
+- **90% KPI:** DistilBERT scores every English review; on the full Task 1 corpus (~1,277 reviews) about **91%** are English, so **~91%** of all rows receive a score. Use the full run (`python scripts/run_sentiment_analysis.py`), not `--sample`, when checking this KPI.
+- **Optional:** `--compare-vader` for tool comparison sample.
+
+### Themes
+
+- TF-IDF keywords per bank + rule-based mapping to 6 business themes (see `docs/THEME_GROUPING.md`).
+- Tokenization + stop words via NLTK; optional spaCy lemmatization.
+
+### Tool selection rationale
+
+| Tool | Role |
+|------|------|
+| DistilBERT SST-2 | Primary sentiment (English reviews) |
+| VADER | Optional comparison (`--compare-vader`) |
+| TF-IDF + keyword rules | Themes and keyword evidence |
+
+### Task 2 checklist
+
+| Requirement | Status |
+|-------------|--------|
+| DistilBERT positive / negative / neutral + confidence | `src/sentiment_analysis.py` |
+| English-only sentiment; Amharic → `non_english` | `src/language_filter.py` |
+| Aggregate by bank and star rating | `sentiment_summary.json` |
+| TF-IDF + 3–6 themes per bank | `src/thematic_analysis.py`, `docs/THEME_GROUPING.md` |
+| Export CSV (`review_id`, `review_text`, `sentiment_label`, `sentiment_score`, `identified_theme`) | `reviews_sentiment_export.csv` |
+| Modular pipeline script | `scripts/run_sentiment_analysis.py` |
+| ≥400 reviews with sentiment (English subset) | ~1,162 on full clean corpus |
+| Branch `task-2` + PR to `main` | Commit & push when ready |
+
 ## Git
 
 ```bash
-git checkout task-1
+git checkout task-2
 git add .
-git commit -m "feat(scrape): update Task 1 pipeline"
-git push -u origin task-1
+git commit -m "feat(nlp): add Task 2 sentiment and thematic analysis"
+git push -u origin task-2
 ```
